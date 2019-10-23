@@ -128,9 +128,9 @@ class CommandLineInterface
     end
 
     def display_collection
-        #This is not working properly right now for every user instance, so I am going to work on it more!
+        #This is not working properly right now for every user, so I am going to work on it more!
         puts "What is your user id?"
-        this_time_response=STDIN.gets # add chomp
+        this_time_response=STDIN.gets.chomp
 
         if Poem.find_by(user_id: this_time_response)
             collection_right_now=Poem.find_by(user_id:this_time_response)
