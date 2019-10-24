@@ -51,14 +51,21 @@ class CommandLineInterface
     def find_a_poem
         puts "Enter a location."
         puts "Those we currently have poems for include:"
-        puts "Somewhere, Nowhere, Everywhere, Anywhere, In the Channel, In the Lake, and New York"
+        puts "Somewhere, Nowhere, Everywhere, Anywhere, Elsewhere, In the Channel, In the Lake, and New York"
         entered_value=STDIN.gets.chomp
 
         if Place.find_by(location:entered_value)
+            #This works if there is only one poem associated with a location,
+            #but I need to loop through with a map to retrieve all of the poems associated with a location.
             result=Place.find_by(location:entered_value).id
-            output=Poem.find_by(place_id: result).title
-            another_output=Poem.find_by(place_id: result).author
-            puts "Enjoy this poem \"#{output}\" by #{another_output}!"
+            output=Poem.where(place_id: result)
+            array_of_poem_titles= output.map do |poem_instance|
+                poem_instance.title
+            end
+            array_of_authors=output.map do |poem_instance|
+                poem_instance.author
+            end
+            puts "Enjoy this/these poem(s) #{array_of_poem_titles} by this/these author(s) #{array_of_authors}!"
 
         else
         puts "I'm sorry; we currently do not have any poems about that place!"
@@ -100,8 +107,8 @@ class CommandLineInterface
 
     def update_status
         puts "Would you like to change the status of your poem..."
-        puts "1. to 'read'? If so, type 'read'."
-        puts "2. or to 'unread'? If so, type 'unread'."
+        puts "1. to 'read'? If so, enter 1."
+        puts "2. or to 'unread'? If so, enter 2."
         this_response=STDIN.gets.chomp
 
         puts "Okay. What poem's status would you like to update?"
@@ -112,7 +119,7 @@ class CommandLineInterface
             puts "Okay, no problem. What is your user id?"
             this_users_id=STDIN.gets.chomp
             if this_poem_that_was_entered.user_id== this_users_id.to_i
-                if this_response== "read"
+                if this_response== "1"
                     this_poem_that_was_entered.update(read: true)
                     puts "Excellent. The poem status was updated to 'read'."
                 else
@@ -128,21 +135,34 @@ class CommandLineInterface
     end
 
     def display_collection
-        #This is not working properly right now for every user, so I am going to work on it more!
         puts "What is your user id?"
         this_time_response=STDIN.gets.chomp
+        the_user_id_entered=this_time_response.to_i
 
-        if Poem.find_by(user_id: this_time_response)
-            collection_right_now=Poem.find_by(user_id:this_time_response)
-            puts "This is your current collection. I hope you are enjoying the poems."
-            puts  "Poems: \"#{collection_right_now.title}\""
-            puts "Authors: #{collection_right_now.author}"
-            if collection_right_now.read== true
-            puts "Read or unread? read"
-            else puts "Read or unread? unread"
-            end 
+        if User.find_by(id: the_user_id_entered)
+            collection_right_now=User.find_by(id: the_user_id_entered).poems
+                the_poem_titles= collection_right_now.map do |poem_instance|
+                    poem_instance.title
+                end
+                the_author_names= collection_right_now.map do |poem_instance|
+                    poem_instance.author
+                end
+                puts "This is your current collection."
+                puts  "Poems: #{the_poem_titles}"
+                puts "Authors: #{the_author_names}"
+                was_it_read=collection_right_now.map do |poem_instance|
+                    poem_instance.read
+                end
+                if was_it_read.include?(true)
+                    #This ends up being a kind of magic eight ball response. It is something I could work more on!
+                    puts "Read or unread? At least some of your poems have been read."
+                else puts "Read or unread? You either have no poems at the moment,"
+                         puts  "or you have not finished reading all of the poems in your collection yet."
+                    end 
+            # end
         else 
             puts "I'm sorry. There is no record of this user id."
         end 
     end
+
 end
