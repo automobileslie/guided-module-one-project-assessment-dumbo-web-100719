@@ -1,7 +1,10 @@
 class CommandLineInterface
     def greet
         puts                "Welcome to Poetry Finder!".red
-        puts         "What would you like to do?".yellow 
+        puts            "Find a place to fall in love with.".yellow
+        puts            "Or learn to appreciate where you already are.".yellow
+        puts            "With the help of poetry.".yellow
+        puts         "What would you like to do?".red
         puts        "1. create a user id-- if so, enter 1".blue
         puts        "2. find a poem--if so, enter 2".blue
         puts        "3. add a poem to your collection--if so, enter 3".blue
@@ -59,8 +62,6 @@ class CommandLineInterface
         entered_value=STDIN.gets.chomp
 
         if Place.find_by(location:entered_value)
-            #This works if there is only one poem associated with a location,
-            #but I need to loop through with a map to retrieve all of the poems associated with a location.
             result=Place.find_by(location:entered_value).id
             output=Poem.where(place_id: result)
             array_of_poem_titles= output.map do |poem_instance|
