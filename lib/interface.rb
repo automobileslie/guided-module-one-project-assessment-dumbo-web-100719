@@ -171,7 +171,7 @@ class CommandLineInterface
                 the_user_ids= collection_right_now.map do |poem_instance|
                     poem_instance.user_id
                 end
-                puts "This is the collection that belongs to #{the_user_names}, with id number(s): #{the_user_ids}."
+                puts "This is the collection that belongs to #{the_user_names}, with id number(s): #{the_user_ids.uniq}."
                 puts  "Poems: #{the_poem_titles}"
                 puts "Authors: #{the_author_names}"
                 puts "Locations of Poems: #{locations}"
