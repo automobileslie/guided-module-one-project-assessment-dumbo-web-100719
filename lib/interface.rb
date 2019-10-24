@@ -150,14 +150,31 @@ class CommandLineInterface
         if User.find_by(id: the_user_id_entered)
             collection_right_now=User.find_by(id: the_user_id_entered).poems
                 the_poem_titles= collection_right_now.map do |poem_instance|
-                    poem_instance.title
+                    poem_instance.title #also display the users and authors
+                end
+                the_poem_place_instances= collection_right_now.map do |poem_instance|
+                    poem_instance.place
+                end
+                #the above returns an array(because it is a map) of instances of places that the poems in the collection are associated with. In order to get just the location, I will need to do another map to pull out the location(s) associated with the poems.
+                locations= the_poem_place_instances.map do |place_instance|
+                    place_instance.location
+                end
+                the_user_instance= collection_right_now.map do |poem_instance|
+                    poem_instance.user
+                end   
+                the_user_names=the_user_instance.map do |user_instance|
+                    user_instance.name
                 end
                 the_author_names= collection_right_now.map do |poem_instance|
                     poem_instance.author
                 end
-                puts "This is your current collection."
+                the_user_ids= collection_right_now.map do |poem_instance|
+                    poem_instance.user_id
+                end
+                puts "This is the collection that belongs to #{the_user_names}, with id number(s): #{the_user_ids}."
                 puts  "Poems: #{the_poem_titles}"
                 puts "Authors: #{the_author_names}"
+                puts "Locations of Poems: #{locations}"
                 was_it_read=collection_right_now.map do |poem_instance|
                     poem_instance.read
                 end
