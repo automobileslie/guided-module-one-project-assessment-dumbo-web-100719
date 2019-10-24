@@ -9,6 +9,7 @@ class CommandLineInterface
         puts        "5. update whether or not you have read the poems in your collection--if so, enter 5".blue
         puts        "6. see your current collection--if so, enter 6".blue
         puts        "7. retrieve your user id--if so, enter 7".blue
+        puts        "8. Enter anything else to exit the app.".blue
 
         the_first_response=STDIN.gets.chomp
 
@@ -26,6 +27,7 @@ class CommandLineInterface
             self.display_collection
         elsif the_first_response== "7"
             self.retrieve_user_id
+        else puts "Thanks for visiting Poetry Finder!"
         end
     end
 
@@ -38,6 +40,7 @@ class CommandLineInterface
         else 
             puts "I'm sorry. We don't have a user id for that name."
         end
+        self.greet
     end
 
     def create_user
@@ -46,6 +49,7 @@ class CommandLineInterface
         the_entered_name=STDIN.gets.chomp
         this_result=User.create(name: the_entered_name)
         puts "Here is your user_id: #{this_result.id}. Now you can start adding poems!"
+        self.greet
     end
 
     def find_a_poem
@@ -66,10 +70,10 @@ class CommandLineInterface
                 poem_instance.author
             end
             puts "Enjoy this/these poem(s) #{array_of_poem_titles} by this/these author(s) #{array_of_authors}!"
-
         else
         puts "I'm sorry; we currently do not have any poems about that place!"
         end
+        self.greet
     end
 
     def add_to_collection
@@ -85,6 +89,7 @@ class CommandLineInterface
         else
             puts "I'm sorry! That poem is not currently available."
         end
+        self.greet
     end
 
     def delete_from_collection
@@ -103,6 +108,7 @@ class CommandLineInterface
         else
          puts "We actually do not have a record of that poem."
         end
+        self.greet
      end
 
     def update_status
@@ -132,6 +138,7 @@ class CommandLineInterface
         else
             puts "We actually do not have a record of that poem. Please try again."
         end
+        self.greet
     end
 
     def display_collection
@@ -157,12 +164,13 @@ class CommandLineInterface
                     #This ends up being a kind of magic eight ball response. It is something I could work more on!
                     puts "Read or unread? At least some of your poems have been read."
                 else puts "Read or unread? You either have no poems at the moment,"
-                         puts  "or you have not finished reading all of the poems in your collection yet."
+                    puts  "or you have not finished reading all of the poems in your collection yet."
                     end 
             # end
         else 
             puts "I'm sorry. There is no record of this user id."
         end 
+        self.greet
     end
 
 end
