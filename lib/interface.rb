@@ -81,7 +81,7 @@ class CommandLineInterface
         puts "Enter a location."
         puts "Those we currently have poems for include:"
         puts "Somewhere, Nowhere, Everywhere, Anywhere, Elsewhere, In the Channel, In the Lake, and New York"
-        entered_value=STDIN.gets.chomp.capitalize
+        entered_value=STDIN.gets.chomp
 
         if Place.find_by(location:entered_value)
             result=Place.find_by(location:entered_value).id
