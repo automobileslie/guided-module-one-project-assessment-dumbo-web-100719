@@ -73,7 +73,7 @@ class CommandLineInterface
         puts "Enter your name."
         the_entered_name=STDIN.gets.chomp
         this_result=User.create(name: the_entered_name)
-        puts "Here is your user_id: #{this_result.id}. Now you can start adding poems!"
+        puts "Here is your user_id: #{this_result.id.to_i}. Now you can start adding poems!"
         self.main_menu
     end
 
@@ -163,7 +163,7 @@ class CommandLineInterface
     def display_collection
             
         if User.find_by(id: @the_users_id).poems != []
-            collection_right_now= User.find_by(id: @the_users_id).poems.map do |an_instance|
+            User.find_by(id: @the_users_id).poems.map do |an_instance|
                 puts "\"#{poems_titles=an_instance.title}\" by #{the_author_names=an_instance.author}"
                 puts "Location of Poem: #{the_poems_locations=an_instance.place.location}"
                 was_it_read=an_instance.read
